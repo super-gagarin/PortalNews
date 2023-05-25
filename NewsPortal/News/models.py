@@ -11,48 +11,17 @@ class Author(models.Model):
     rating = models.IntegerField(default = 0)
 
     def update_rating(self):
-        rate_post_author = self.post_set.all().aggregate(sum_postrating=Sum('postrating') * 3)['sum_postrating']
-        rate_comment = self.author.comment_set.all().aggregate(sum_comrating=Sum('comrating'))['sum_comrating']
-        rate_comment_post = Post.objects.filter(postauthor=self).values('postrating')
-        # в ответ список querry_set , проходим циклом и складываем сумму рейтинга всех комментариев ко всем post автора.
-        a = 0
-        for i in range(len(rate_comment_post)):
-            a = a + rate_comment_post[i]['postrating']
-        self.rating = rate_post_author + rate_comment + a
+        postrat = self.Post_set.aggregate(postrat=Sum('postrating'))
+        prat = 0
+        prat += postrat.get('postrat')
+        comrat = self.author.comment_set.aggregate(commentrat=Sum('comrating'))
+        crat = 0
+        crat += comrat.get('commentrat')
+        self.rating = prat * 3 + crat
         self.save()
-        # postrat = self.Post_set.aggregate(postrating=Sum('rating'))
-        # prat = 0
-        # prat += postRat.get('postrating')
-        #
-        # commentrat = self.Comment_set.aggregate(commentrating=Sum('rating'))
-        # crat = 0
-        # crat += commentRat.get('commentrating')
-        #
-        # self.ratingAuthor = pRat * 3 + cRat
-        # self.save()
 
 class Category(models.Model):
-    # hotnews = 'HN'
-    # intresting = 'IT'
-    # sport = 'SR'
-    # incidents = 'IN'
-    # politics = 'PT'
-    # society = 'ST'
-    # economy = 'EC'
-    # cosmos = 'CM'
-    #
-    # POS_CAT = [
-    #     (hotnews, 'Сейчас в СМИ'),
-    #     (intresting, 'Интересное'),
-    #     (sport, 'Спорт'),
-    #     (incidents, 'Проишествия'),
-    #     (politics, 'Политика'),
-    #     (society, 'Общество'),
-    #     (economy, 'Экономика'),
-    #     (cosmos, 'Космонавтика')
-    # ]
-    # сategory = models.CharField(choices = POS_CAT, default = hotnews, unique = True)
-    category = models.CharField(max_length=64, unique=True)
+     category = models.CharField(max_length=64, unique=True)
 
 
 class Post(models.Model):
@@ -64,19 +33,16 @@ class Post(models.Model):
     posttext = models.TextField()
     postrating = models.IntegerField(default=0)
 
-
     def like(self):
         self.postrating += 1
         self.save()
-
 
     def dislike(self):
         self.postrating -= 1
         self.save()
 
-
     def preview(self):
-        return self.posttext[:123] + '...' if len(self.posttext) > 124 else self.posttext
+        return '{0}{1}'.format(self.posttext[:123], '...') if len(self.posttext) > 124 else self.posttext
 
 
 class PostCategory(models.Model):
@@ -91,11 +57,9 @@ class Comment(models.Model):
     comdatecreate = models.DateTimeField(auto_now_add=True)
     comrating = models.SmallIntegerField(default=0)
 
-
     def like(self):
         self.comrating += 1
         self.save()
-
 
     def dislike(self):
         self.comrating -= 1
