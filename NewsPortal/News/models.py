@@ -42,7 +42,7 @@ class Post(models.Model):
         self.save()
 
     def preview(self):
-        return '{0}{1}'.format(self.posttext[:123], '...') if len(self.posttext) > 124 else self.posttext
+        return '{0}{1}'.format(self.posttext[:124], '...') if len(self.posttext) > 124 else self.posttext
 
 
 class PostCategory(models.Model):
