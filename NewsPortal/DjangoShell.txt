@@ -1,0 +1,172 @@
+Запуск Django Shell
+
+python manage.py shell
+
+Импорт модуля News
+
+from News.models import *
+
+Новые пользователи
+
+user_1 = User.objects.create_user(username='Валентин')
+user_2 = User.objects.create_user(username='Ихтиандр')
+user_3 = User.objects.create_user(username='Брунгильда')
+user_4 = User.objects.create_user(username='ШтурмоваяБронезбра')
+
+Авторы
+
+Author.objects.create(author=user_1)
+Author.objects.create(author=user_2)
+
+Категории
+
+Category.objects.create(category='Progamming')
+Category.objects.create(category='Cosmonautic')
+Category.objects.create(category='Science')
+Category.objects.create(category='Games')
+
+Id автора
+
+au_1 = Author.objects.get(id=1)
+au_2 = Author.objects.get(id=2)
+
+Посты
+
+Post.objects.create(postauthor=au_1, postnewstype='news', posttitle='Первая новость', posttext='Некоторый текст, его надо больше, но лень писать!')
+Post.objects.create(postauthor=au_1, postnewstype='article', posttitle='Первая статья', posttext='Некоторый текст, его надо больше, но лень писать!')
+Post.objects.create(postauthor=au_2, postnewstype='news', posttitle='Вторая новость', posttext='Некоторый текст, его надо больше, но лень писать!')
+Post.objects.create(postauthor=au_2, postnewstype='article', posttitle='Вторая статья', posttext='Некоторый текст, его надо больше, но лень писать!')
+
+Категории
+
+Post.objects.get(id=1).postcat.add(Category.objects.get(id=2))
+Post.objects.get(id=2).postcat.add(Category.objects.get(id=4))
+Post.objects.get(id=3).postcat.add(Category.objects.get(id=3))
+Post.objects.get(id=4).postcat.add(Category.objects.get(id=1))
+
+Post.objects.get(id=1).postcat.add(Category.objects.get(id=3))
+Post.objects.get(id=2).postcat.add(Category.objects.get(id=1))
+Post.objects.get(id=3).postcat.add(Category.objects.get(id=4))
+Post.objects.get(id=4).postcat.add(Category.objects.get(id=2))
+
+Комментарии
+
+Comment.objects.create(compost=Post.objects.get(id=1), comuser=Author.objects.get(id=1).author, comtext='Фиговый пост №1')
+Comment.objects.create(compost=Post.objects.get(id=2), comuser=Author.objects.get(id=2).author, comtext='Фиговый пост №2')
+Comment.objects.create(compost=Post.objects.get(id=2), comuser=Author.objects.get(id=2).author, comtext='Фиговый пост №3')
+Comment.objects.create(compost=Post.objects.get(id=3), comuser=Author.objects.get(id=1).author, comtext='Фиговый пост №4')
+Comment.objects.create(compost=Post.objects.get(id=4), comuser=Author.objects.get(id=2).author, comtext='Фиговый пост №5')
+
+Лайки комментариев
+
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).comrating
+
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).comrating
+
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=3).dislike()
+Comment.objects.get(id=4).like()
+Comment.objects.get(id=5).like()
+
+Лайки постов
+
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).postrating
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=4).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=4).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=4).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).dislike()
+Post.objects.get(id=1).dislike()
+Post.objects.get(id=1).dislike()
+
+Комментарии пользователей 3 и 4
+
+Comment.objects.create(compost=Post.objects.get(id=3), comuser=User.objects.get(id=3), comtext='Нафаня!!!')
+Comment.objects.create(compost=Post.objects.get(id=1), comuser=User.objects.get(id=4), comtext='Я сказал Горбатый!!!')
+
+Автор по id
+
+Author.objects.get(id=1)
+
+Обновляем рейтинги
+
+su27 = Author.objects.get(id=1)
+su27.update_rating()
+su27.rating
+mig29 = Author.objects.get(id=2)
+mig29.update_rating()
+mig29.rating
+
+
+Лучший рейтинг
+
+ar_1 = Author.objects.order_by('-rating')[:1]
+ar_1
+
+Все рейтинги
+
+all_r = Author.objects.order_by('-rating')
+all_r
+
+
+Все рейтинги через генератор
+
+print('\n'.join([str(x.rating) + '\n' + x.author.username for x in all_r]))
+
+Превью постов
+
+Post.objects.get(id=1).preview()
+Post.objects.get(id=2).preview()
+Post.objects.get(id=3).preview()
+
+Лучший пост по лайкам
+
+bpost = Post.objects.order_by('-postrating')[0]
+
+Вывод данных лучшего поста по лайкам
+
+for i in bpost:
+     f'{i.postdatecreate:%Y-%m-%d %H:%M:%S%z}'
+     i.postauthor.author.username
+     i.postrating
+     i.posttitle
+     i.preview()
+
+Выводим комментарии к этому посту
+
+bpostcom = Comment.objects.filter(compost=bpost.id)
+
+
+for i in bpostcom:
+     f'{i.comdatecreate:%Y-%m-%d %H:%M:%S%z}'
+     i.comuser.username
+     i.comrating
+     i.comtext
+
+
+Вывод через value
+bpostcom.values("comdatecreate", "comuser", "comrating", "comtext")
+
+
+
+
