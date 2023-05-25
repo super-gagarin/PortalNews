@@ -11,7 +11,7 @@ class Author(models.Model):
     rating = models.IntegerField(default = 0)
 
     def update_rating(self):
-        postrat = self.Post_set.aggregate(postrat=Sum('postrating'))
+        postrat = self.post_set.aggregate(postrat=Sum('postrating'))
         prat = 0
         prat += postrat.get('postrat')
         comrat = self.author.comment_set.aggregate(commentrat=Sum('comrating'))
