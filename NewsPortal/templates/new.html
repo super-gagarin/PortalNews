@@ -1,0 +1,18 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет Product -->
+{% block title %}
+Новость {{ new.id }} - подробно
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ new.posttitle }}</h5>
+    <p class="card-text">{{ new.posttext }}</p>
+    <a class="btn btn-primary stretched-link" href="/news/" >Вернуться</a>
+  </div>
+</div>
+{% endblock content %}

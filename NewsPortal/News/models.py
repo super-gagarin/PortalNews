@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.core.validators import MinValueValidator
 
 
 class Author(models.Model):
@@ -17,13 +18,32 @@ class Author(models.Model):
         self.rating = prat * 3 + crat
         self.save()
 
-class Category(models.Model):
-     category = models.CharField(max_length=64, unique=True)
+    def __str__(self):
+        return f'{self.author.username.title()}: рейтинг {str(self.rating)}'
 
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
+
+class Category(models.Model):
+    category = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return f'{self.category.title()}'
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 class Post(models.Model):
-    postauthor = models.ForeignKey(Author, on_delete = models.CASCADE)
-    postnewstype = models.CharField(max_length=8, choices = [('article', 'статья'), ('news', 'новость')], default = 'news')
+    NEWS = 'news'
+    ARTICLE = 'article'
+    CATEGORY_CHOISES = (
+        (NEWS, 'Новость'),
+        (ARTICLE, 'Статья'),
+    )
+    postauthor = models.ForeignKey(Author, on_delete=models.CASCADE)
+    postnewstype = models.CharField(max_length=8, choices=CATEGORY_CHOISES, default=NEWS)
     postdatecreate = models.DateTimeField(auto_now_add=True)
     postcat = models.ManyToManyField(Category, through='PostCategory')
     posttitle = models.CharField(max_length=124)
@@ -38,13 +58,32 @@ class Post(models.Model):
         self.postrating -= 1
         self.save()
 
-    def preview(self):
-        return '{0}{1}'.format(self.posttext[:124], '...') if len(self.posttext) > 124 else self.posttext
+    def preview(self, pre_len=20):
+        return '{0}{1}'.format(self.posttext[:pre_len], '...') if len(self.posttext) > pre_len else self.posttext
 
+    def categorys(self):
+        return ', '.join([x.category for x in self.postcat.all()])
+
+    def __str__(self):
+        return f'{self.posttitle.title()}: {self.posttext[:20]}'
+
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщения'
 
 class PostCategory(models.Model):
     postthrough = models.ForeignKey(Post, on_delete=models.CASCADE)
     categorythrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.categorythrough.category}: {self.postthrough.posttitle.title()}'
+
+
+    class Meta:
+        verbose_name = 'Катеогория сообщения'
+        verbose_name_plural = 'Катеогория сообщений'
+
 
 
 class Comment(models.Model):
@@ -61,3 +100,11 @@ class Comment(models.Model):
     def dislike(self):
         self.comrating -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.comuser.username}: {self.comtext[:20]}'
+
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'

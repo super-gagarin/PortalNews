@@ -1,0 +1,59 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% load custom_tags %}
+
+{% block title %}
+Новостная лента
+{% endblock title %}
+
+{% block content %}
+    {% if news %}
+   <h1 class="text-center">Все новости ({{ news|length }})</h1>
+<!--   <h3>{{ time_now|date:'M d Y' }}</h3>-->
+   <h3 class="text-center">Сегодня {% current_time '%d %B %Y' %}</h3>
+<!--   <h3> {{ incredible_news|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>-->
+
+   <hr>
+
+       <table class="table table-sm table table-hover table table-bordered table table-striped">
+           <thead>
+               <tr>
+<!--                   <th scope="col">Автор</th>-->
+<!--                   <th scope="col">Тип сообщения</th>-->
+                   <th scope="col">Заголовок</th>
+                   <th scope="col">Дата публикации</th>
+                   <th scope="col">Фрагмент публикации</th>
+<!--                   <th scope="col">Текст сообщения</th>-->
+<!--                   <th scope="col">Рейтинг сообщения</th>-->
+               </tr>
+           </thead>
+            <tbody>
+               {% for new in news %}
+               <a href="#">
+                   <tr onclick="window.location='{{ new.id }}';" data-bs-toggle="tooltip" data-bs-placement="top" title="Кликните на строке, чтобу увидеть всю публикацию">
+                       <td>{{ new.posttitle }}</td>
+    <!--                   <td>{{ new.postauthor.author }}</td>-->
+    <!--                   <td>{{ new.postnewstype|truncatewords:2 }}</td>-->
+    <!--                   <td>{{ new.get_postnewstype_display }}</td>-->
+                       <td>{{ new.postdatecreate|date:'d M Y' }}</td>
+    <!--                    <td>{% for post in new.postcat.all %}{{ post.category }}|{% endfor %}</td>-->
+    <!--                    <td>{{ new.postcat.all|join:", " }}</td>-->
+    <!--                   <td>{{ new.categorys }}</td>-->
+
+    <!--                   <td>{{ new.posttext }}</td>-->
+                       <td>{{ new.preview }}</td>
+    <!--                   <td>{{ new.postrating }}</td>-->
+                   </tr>
+               </a>
+
+
+               {% endfor %}
+           </tbody>
+       </table>
+   {% else %}
+       <h2>Новостей нету!</h2>
+   {% endif %}
+{% endblock content %}
