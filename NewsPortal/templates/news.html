@@ -32,25 +32,22 @@
            </thead>
             <tbody>
                {% for new in news %}
-               <a href="#">
-                   <tr onclick="window.location='{{ new.id }}';" data-bs-toggle="tooltip" data-bs-placement="top" title="Кликните на строке, чтобу увидеть всю публикацию">
-                       <td>{{ new.posttitle|censor }}</td>
-    <!--                   <td>{{ new.postauthor.author }}</td>-->
-    <!--                   <td>{{ new.postnewstype|truncatewords:2 }}</td>-->
-    <!--                   <td>{{ new.get_postnewstype_display }}</td>-->
-                       <td>{{ new.postdatecreate|date:'d M Y' }}</td>
-    <!--                    <td>{% for post in new.postcat.all %}{{ post.category }}|{% endfor %}</td>-->
-    <!--                    <td>{{ new.postcat.all|join:", " }}</td>-->
-    <!--                   <td>{{ new.categorys }}</td>-->
 
-    <!--                   <td>{{ new.posttext }}</td>-->
-                       <td>{{ new.preview|censor }}</td>
-    <!--                   <td>{{ new.postrating }}</td>-->
-                   </tr>
-               </a>
+               <tr onclick="window.location='{{ new.id }}';" data-bs-toggle="tooltip" data-bs-placement="top" title="Кликните на строке, чтобу увидеть всю публикацию">
+                   <td>{{ new.posttitle|censor }}</td>
+<!--                   <td>{{ new.postauthor.author }}</td>-->
+<!--                   <td>{{ new.postnewstype|truncatewords:2 }}</td>-->
+<!--                   <td>{{ new.get_postnewstype_display }}</td>-->
+                   <td>{{ new.postdatecreate|date:'d M Y' }}</td>
+<!--                    <td>{% for post in new.postcat.all %}{{ post.category }}|{% endfor %}</td>-->
+<!--                    <td>{{ new.postcat.all|join:", " }}</td>-->
+<!--                   <td>{{ new.categorys }}</td>-->
 
-
-               {% endfor %}
+<!--                   <td>{{ new.posttext }}</td>-->
+                   <td>{{ new.preview|censor }}</td>
+<!--                   <td>{{ new.postrating }}</td>-->
+               </tr>
+           {% endfor %}
            </tbody>
        </table>
    {% else %}
