@@ -3,17 +3,24 @@ from django import template
 
 register = template.Library()
 
-CURRENCIES_SYMBOLS = {
-   'rub': 'Р',
-   'usd': '$',
-}
+UNACCEPTABLE_WORDS = ['дурак', 'мудило', 'задница', 'сиськи']
 
 @register.filter()
-def currency(value, code='rub'):
+def censor(value):
    """
    value: значение, к которому нужно применить фильтр
    code: код валюты
    """
-   postfix = CURRENCIES_SYMBOLS[code]
+   value = [x for x in value.split(" ") if x]
 
-   return f'{value} {postfix}'
+   # for i, word in enumerate(value):
+   #    if word.lower() in UNACCEPTABLE_WORDS:
+   #       value[i] = f"{word[0]}{(len(word)-2) * '*'}{word[-1]}"
+
+
+   cen_sor = ' '.join([
+      f"{word[0]}{(len(word)-2) * '*'}{word[-1]}" if word.lower() in UNACCEPTABLE_WORDS else value[i]
+      for i, word in enumerate(value)
+   ])
+
+   return cen_sor

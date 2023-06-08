@@ -1,6 +1,10 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
+{% load custom_tags %}
+
 <!-- Название у нас будет Product -->
 {% block title %}
 Новость {{ new.id }} - подробно
@@ -10,8 +14,8 @@
 {% block content %}
 <div class="card" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">{{ new.posttitle }}</h5>
-    <p class="card-text">{{ new.posttext }}</p>
+    <h5 class="card-title">{{ new.posttitle|censor }}</h5>
+    <p class="card-text">{{ new.posttext|censor }}</p>
     <a class="btn btn-primary stretched-link" href="/news/" >Вернуться</a>
   </div>
 </div>
