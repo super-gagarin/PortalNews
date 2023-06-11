@@ -24,7 +24,7 @@ class PostFilter(FilterSet):
             attrs={'type': 'date', 'class': "form-control"}))
 
     postdatecreate__lt = django_filters.DateFilter(
-        field_name="postdatecreate", label="От даты", lookup_expr='gt',
+        field_name="postdatecreate", label="До даты", lookup_expr='lt',
         widget=django.forms.DateInput(
             attrs={'type': 'date', 'class': "form-control"}))
 
