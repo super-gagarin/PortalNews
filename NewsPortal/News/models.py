@@ -3,7 +3,24 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.validators import MinValueValidator
 from django.urls import reverse
+from django.utils.html import format_html
 
+
+class MyModel(models.Model):
+    name = models.CharField(max_length=50)
+    url = models.URLField()
+
+    def link(self):
+        return format_html('<a href="{}">{}</a>', self.url, self.url)
+
+    link.allow_tags = True
+    link.short_description = 'URL'
+    def __str__(self):
+        return 'Обратно на новостую ленту'
+
+    class Meta:
+        verbose_name = 'Ссылка'
+        verbose_name_plural = 'Ссылки'
 
 class Author(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
