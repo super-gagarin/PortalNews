@@ -32,9 +32,19 @@
                            <a class="nav-link" href="/contacts/">Мои контакты</a>
                        </li>
                        <li class="nav-item">
+                           <a class="nav-link" href="{% url 'search_posts' %}">Поиск</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="/news/articles/create/">Добавить статью</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="/news/news/create/">Добавить Новость</a>
+                       </li>
+                       <li class="nav-item">
                            <a class="nav-link" href="/admin/">Администрирование Django</a>
                        </li>
                    </ul>
+                   <h1>{{ request.resolver_match.view_name }}</h1>
                </div>
             </div>
         </nav>

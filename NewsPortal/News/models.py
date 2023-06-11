@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.validators import MinValueValidator
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -18,6 +19,9 @@ class Author(models.Model):
         self.rating = prat * 3 + crat
         self.save()
 
+    def __repr__(self):
+        return f"Author (author.name='{self.author}', rating='{self.rating}')"
+
     def __str__(self):
         return f'{self.author.username.title()}: рейтинг {str(self.rating)}'
 
@@ -30,6 +34,9 @@ class Category(models.Model):
 
     def __str__(self):
         return f'{self.category.title()}'
+
+    def __repr__(self):
+        return f"Category (name='{self.category}')"
 
     class Meta:
         verbose_name = 'Категория'
@@ -64,9 +71,17 @@ class Post(models.Model):
     def categorys(self):
         return ', '.join([x.category for x in self.postcat.all()])
 
+    def get_absolute_url(self):
+        """ Вернуть url, зарегистрированный для отображения одной статьи """
+        return reverse('post_detail', args=[str(self.id)])
+
     def __str__(self):
         return f'{self.posttitle.title()}: {self.posttext[:20]}'
 
+    def __repr__(self):
+        return f"Post (postauthor.author.name='{self.postauthor.author}', " \
+               f"posttitle='{self.posttitle}', postrating='{self.postrating}'," \
+               f"postnewstype='{self.postnewstype}')"
 
     class Meta:
         verbose_name = 'Сообщение'

@@ -10,8 +10,19 @@
 {% endblock title %}
 
 {% block content %}
-    {% if news %}
-   <h1 class="text-center">Все новости ({{ news|length }})</h1>
+
+{% if news %}
+
+{# Форма фильтра 'PostFilter' #}
+    <form action="" method="GET">
+        {# Переменная, которую мы передали через контекст, может сгенерировать форму с полями #}
+        {{ search_filter.form.as_p }}
+        <input type="submit" value="Найти" class="btn btn-success"/>
+        <a class="btn btn-secondary" role="button" href="{{ request.path }}">Сбросить фильтры</a>
+        <a class="btn btn-primary" href="/news/">Закрыть поиск</a>
+    </form>
+
+<h1 class="text-center">Все новости ({{ news|length }})</h1>
 <!--   <h3>{{ time_now|date:'M d Y' }}</h3>-->
    <h3 class="text-center">Сегодня {% current_time '%d %B %Y' %}</h3>
 <!--   <h3> {{ incredible_news|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>-->
@@ -47,8 +58,8 @@
                    <td>{{ new.preview|censor }}</td>
 <!--                   <td>{{ new.posttext }}</td>-->
 <!--                   <td>{{ new.postrating }}</td>-->
-                   <td><a class="btn btn-primary btn-sm" href="/news/{{ new.pk }}/edit/">Редактировать</a></td>
-                   <td><a class="btn btn-primary btn-sm" href="/news/{{ new.pk }}/delete/">Удалить</a></td>
+                   <td><a class="btn btn-primary btn-sm" href="/news/news/{{ new.pk }}/edit/">Редактировать</a></td>
+                   <td><a class="btn btn-primary btn-sm" href="/news/news/{{ new.pk }}/delete/">Удалить</a></td>
                </tr>
            {% endfor %}
            </tbody>
@@ -80,7 +91,6 @@
         </ul>
     </nav>
 </div>
-
 {% else %}
    <h2>Новостей нету!</h2>
 {% endif %}
