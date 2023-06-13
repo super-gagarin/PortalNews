@@ -20,14 +20,23 @@
 
        <table class="table table-sm table table-hover table table-bordered table table-striped">
            <thead>
-               <tr>
+            {% if perms.News.add_post %}
+                <div>
+                   Добавить:
+                   <a class="btn btn-primary btn-sm" href="/news/create/"> Новость </a>
+                   |
+                   <a class="btn btn-primary btn-sm" href="/articles/create/"> Статью </a>
+                </div>
+            {% endif %}
+                <tr>
 <!--                   <th scope="col">Автор</th>-->
 <!--                   <th scope="col">Тип сообщения</th>-->
                    <th scope="col">Заголовок</th>
                    <th scope="col">Дата публикации</th>
                    <th scope="col">Фрагмент публикации</th>
-                   <th scope="col">Редактировать</th>
-                   <th scope="col">Удалить</th>
+                   {% if perms.News.change_post or perms.news.delete_post %}
+                    <th scope="col">Действия</th>
+                   {% endif %}
                </tr>
            </thead>
             <tbody>
@@ -47,8 +56,14 @@
                    <td>{{ new.preview|censor }}</td>
 <!--                   <td>{{ new.posttext }}</td>-->
 <!--                   <td>{{ new.postrating }}</td>-->
-                   <td><a class="btn btn-primary btn-sm" href="/news/{{ new.pk }}/edit/">Редактировать</a></td>
-                   <td><a class="btn btn-primary btn-sm" href="/news/{{ new.pk }}/delete/">Удалить</a></td>
+                   <td>
+                       {% if perms.News.change_post %}
+                       <a class="btn btn-primary btn-sm" href="/news/{{ new.pk }}/edit/">Редактировать</a>
+                       {% endif %}
+                       {% if perms.News.delete_post %}
+                       <a class="btn btn-primary btn-sm" href="/news/{{ new.pk }}/delete/">Удалить</a>
+                       {% endif %}
+                   </td>
                </tr>
            {% endfor %}
            </tbody>

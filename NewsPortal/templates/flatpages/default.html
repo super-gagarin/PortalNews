@@ -32,17 +32,28 @@
                            <a class="nav-link" href="/contacts/">Мои контакты</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="{% url 'search_posts' %}">Поиск</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="/news/articles/create/">Добавить статью</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="/news/news/create/">Добавить Новость</a>
-                       </li>
-                       <li class="nav-item">
                            <a class="nav-link" href="/admin/">Администрирование Django</a>
                        </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{% url 'search_posts' %}">Поиск</a>
+                       </li>
+                       {% if user.is_authenticated %}
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">{% firstof request.user.get_full_name request.user.username %}</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+                           </li>
+                       {% else %}
+
+                            <li class="nav-item">
+                               <a class="nav-link" href="/accounts/login/">Авторизоваться</a>
+                           </li>
+
+                       {% endif %}
+
+
+
                    </ul>
                    <h1>{{ request.resolver_match.view_name }}</h1>
                </div>

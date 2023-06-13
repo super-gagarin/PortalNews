@@ -11,6 +11,8 @@
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Сохранить" class="btn btn-primary"/>
+<!--    <input id="your_name" type="text" name="your_name" value="{{ postnewstype }}">-->
+<!--    <label for="{{ postnewstype }}">Email subject:</label>-->
     <a class="btn btn-outline-danger" role="button" href="{{ request.path }}">Очистить введенные данные</a>
 </form>
 {% endblock content %}
